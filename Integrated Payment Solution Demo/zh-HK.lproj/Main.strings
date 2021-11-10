@@ -1,0 +1,21 @@
+
+/* Class = "UILabel"; text = "Amount (cent): "; ObjectID = "BlO-N0-I7e"; */
+"BlO-N0-I7e.text" = "交易金額 (單位：仙): ";
+
+/* Class = "UILabel"; text = "Merchant Reference:"; ObjectID = "La5-xk-swd"; */
+"La5-xk-swd.text" = "交易參考號:";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "Lam-5V-lSm"; */
+"Lam-5V-lSm.text" = "Label";
+
+/* Class = "UILabel"; text = "Payment Type:"; ObjectID = "Pju-2b-mmy"; */
+"Pju-2b-mmy.text" = "交易類型:";
+
+/* Class = "UILabel"; text = "Result:"; ObjectID = "WtD-9i-Qsf"; */
+"WtD-9i-Qsf.text" = "支付結果:";
+
+/* Class = "UIButton"; normalTitle = "Pay"; ObjectID = "ZTs-tc-fhn"; */
+"ZTs-tc-fhn.normalTitle" = "支付";
+
+/* Class = "UITextField"; text = "10"; ObjectID = "zz2-Kh-I7K"; */
+"zz2-Kh-I7K.text" = "10";

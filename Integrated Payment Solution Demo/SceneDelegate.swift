@@ -1,0 +1,89 @@
+//
+//  SceneDelegate.swift
+//  Integrated Payment Solution Demo
+//
+//  Created by kam on 24/6/2021.
+//  Copyright © 2021 EFT Solutions. All rights reserved.
+//
+
+import UIKit
+
+class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+
+    var window: UIWindow?
+
+
+    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
+        // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
+        // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
+        guard let _ = (scene as? UIWindowScene) else { return }
+    }
+
+    func sceneDidDisconnect(_ scene: UIScene) {
+        // Called as the scene is being released by the system.
+        // This occurs shortly after the scene enters the background, or when its session is discarded.
+        // Release any resources associated with this scene that can be re-created the next time the scene connects.
+        // The scene may re-connect later, as its session was not neccessarily discarded (see `application:didDiscardSceneSessions` instead).
+    }
+
+    func sceneDidBecomeActive(_ scene: UIScene) {
+        // Called when the scene has moved from an inactive state to an active state.
+        // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
+    }
+
+    func sceneWillResignActive(_ scene: UIScene) {
+        // Called when the scene will move from an active state to an inactive state.
+        // This may occur due to temporary interruptions (ex. an incoming phone call).
+    }
+
+    func sceneWillEnterForeground(_ scene: UIScene) {
+        // Called as the scene transitions from the background to the foreground.
+        // Use this method to undo the changes made on entering the background.
+    }
+
+    func sceneDidEnterBackground(_ scene: UIScene) {
+        // Called as the scene transitions from the foreground to the background.
+        // Use this method to save data, release shared resources, and store enough scene-specific state information
+        // to restore the scene back to its current state.
+    }
+    
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        // Determine who sent the URL.
+        print(URLContexts)
+        if let urlContext = URLContexts.first {
+            let sendingAppID = urlContext.options.sourceApplication
+                let url = urlContext.url
+            NSLog("source application = \(sendingAppID ?? "Unknown"), url=\(url.absoluteString)")
+            
+            // Process the URL.
+            guard let urlHost = url.host,
+                  let urlScheme = url.scheme else {
+                return
+            }
+            
+            if urlScheme == "IntegratedPaymentSolutionDemo" {
+                // Call Alipay api according to url host
+                if urlHost == "safepay" {
+                    AlipaySDK.defaultService().processOrder(withPaymentResult: url, standbyCallback: {
+                        result in
+                        ApiManager.sharedInstance.onAlipayResp(result)
+                    })
+                } else if urlHost == "platformapi" {
+                    AlipaySDK.defaultService().processAuthResult(url, standbyCallback: {
+                        result in
+                        ApiManager.sharedInstance.onAlipayResp(result)
+                    })
+                }
+            } else {
+                // WeChant Pay
+                WXApi.handleOpen(url, delegate: ApiManager.sharedInstance)
+            }
+        }
+    }
+    
+    func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+        WXApi.handleOpenUniversalLink(userActivity, delegate: ApiManager.sharedInstance)
+    }
+}
+
